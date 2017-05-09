@@ -1,0 +1,63 @@
+<?php
+
+function collatz_menu() {
+    $items['collatz'] = array(
+        'title' => 'The Collatz Sequence',
+        'access callback' => TRUE,
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('collatz_form'),
+        'type' => MENU_NORMAL_ITEM,
+        'menu' => 'navigation',
+    );
+    $items['results'] = array(
+        'title' => 'The Collatz Sequence Results',
+        'access callback' => TRUE,
+        'page callback' => 'show_results',
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function collatz_form() {
+    $form['starting_number'] = array(
+        '#title' => 'Begin the Collatz Sequence',
+        '#description' => 'enter a whole, positive integer',
+        '#type' => 'textfield',
+        '#element_validate' => array('element_validate_integer_positive'),
+        '#required' => TRUE,
+    );
+    $form['submit'] = array(
+     '#type' => 'submit',
+     '#value' => 'submit',
+   );
+   return $form;
+}
+
+function collatz_form_submit($form, &$form_state) {
+    $number = $form_state['values']['starting_number'];
+    // $finished = array(1,4,2,1,4,2,1,4,2);
+
+    $_SESSION['result']= collatz_array_generator($number);
+    $form_state['redirect']='results';
+}
+
+function collatz_array_generator($number) {
+    $result=array();
+    while($number != 1) {
+        if(($number % 2) == 0 ){
+            $number = $number/2;
+        }else{
+            $number = ($number*3)+1;
+        }
+        array_push($result,$number);
+    }
+    return $result;
+}
+
+function show_results(){
+    $show_result = '';
+    foreach ($_SESSION['result'] as $value) {
+        $show_result.= '<li>' . $value. '</li>';
+    }
+    return '<ul>'. $show_result . '</ul>';
+}

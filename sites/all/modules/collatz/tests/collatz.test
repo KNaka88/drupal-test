@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ * Tests for the hello world module.
+ */
+ class CollatzTests extends DrupalWebTestCase {
+
+  public static function getInfo() {
+      return array(
+          'name' => 'Collatz Test',
+          'description' => 'Tests for the Collatz module',
+          'group' => 'Collatz Group',
+      );
+  }
+
+  public function setUp() {
+      parent::setUp(array('collatz'));
+  }
+
+  public function testHelloWorld() {
+    $this->drupalGet('collatz');
+    $result = collatz_array_generator(45);
+    $this->assertEqual(end($result), 1, 'Check the last value of array is 1');
+  }
+
+ }

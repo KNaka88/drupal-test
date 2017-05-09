@@ -1,0 +1,5 @@
+name = Collatz Sequence
+description = An interesting mathematical sequence
+core = 7.x
+files[] = collatz.module
+files[] = tests/collatz.test
